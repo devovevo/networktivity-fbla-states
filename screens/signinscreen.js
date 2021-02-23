@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+
 import {
   StyleSheet,
   Text,
@@ -12,7 +13,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-import * as firebase from 'firebase';
+import firebase from "firebase/app";
+import "firebase/auth";
 
 function SignInScreen({navigation}) {
     const [_email, _setEmail] = useState("");
@@ -33,6 +35,18 @@ function SignInScreen({navigation}) {
 
     function _goToSignUp() {
         navigation.navigate("Sign Up");
+    }
+
+    function _resetPassword() {
+      if (_email.length > 0)
+      {
+        firebase.auth().sendPasswordResetEmail(_email);
+        Alert.alert("Password reset", "An email has been sent to the provided email on how to reset your password.");
+      }
+      else
+      {
+        Alert.alert("Password reset", "Please enter an email in the email entry so that we can send you a password reset email.");
+      }
     }
   
     return (
@@ -60,7 +74,7 @@ function SignInScreen({navigation}) {
           />
         </View>
   
-        <TouchableOpacity>
+        <TouchableOpacity onPress={_resetPassword}>
           <Text style={styles.forgot_button}>Forgot Password?</Text>
         </TouchableOpacity>
   

@@ -2,11 +2,15 @@ import React from "react";
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useNavigation } from '@react-navigation/native';
 
 import SignInScreen from  './screens/signinscreen';
 import SignUpScreen from './screens/signupscreen';
+import BottomTabNavigationScreen from './screens/bottomtabnavigationscreen';
+import ViewProfileScreen from './screens/viewprofilescreen';
 
-import * as firebase from 'firebase';
+import firebase from "firebase/app";
+import "firebase/auth";
 
 const Stack = createStackNavigator();
 
@@ -21,6 +25,8 @@ const firebaseConfig = {
   measurementId: "G-NNMDQM32TT"
 };
 
+const navigationRef = React.createRef();
+
 function App() {
   try {
     firebase.app();
@@ -32,12 +38,16 @@ function App() {
 
   firebase.auth().onAuthStateChanged(user => {
     if (user != null) {
-      console.log('We are authenticated now!');
+      navigationRef.current.navigate("Tab Navigation");
+    }
+    else
+    {
+      navigationRef.current.navigate("Sign In");
     }
   });
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
       <Stack.Navigator initialRouteName="Sign In">
         <Stack.Screen 
           name="Sign In" 
@@ -48,6 +58,16 @@ function App() {
           name="Sign Up" 
           component={SignUpScreen}
           options={{ title: 'Sign Up', headerTransparent: true } }
+        />
+        <Stack.Screen 
+          name="Tab Navigation" 
+          component={BottomTabNavigationScreen}
+          options={{ title: '', headerTransparent: true, headerLeft: null } }
+        />
+        <Stack.Screen 
+          name="View Profile" 
+          component={ViewProfileScreen}
+          options={{ title: '', headerTransparent: true } }
         />
       </Stack.Navigator>
     </NavigationContainer>

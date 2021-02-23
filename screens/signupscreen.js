@@ -5,59 +5,74 @@ import {
   TextInput,
   Text,
   StyleSheet,
+  Alert,
   Image
 } from 'react-native'
 
-import * as firebase from 'firebase';
+import firebase from "firebase/app";
+import "firebase/auth";
+import "firebase/firestore";
 
 function SignUpScreen() {
     const [_email, _setEmail] = useState("");
     const [_password, _setPassword] = useState("");
     const [_username, _setUsername] = useState("");
     const [_full_name, _setFullName] = useState("");
-
+    
     const [_usernameEntryColor, _setUsernameEntryColor] = useState("#CBC0FF");
     const [_signUpDisabled, _setSignUpDisabled] = useState(true);
 
     function _attemptCreateUserAccount() {
+
+      if (!_checkUsernameExists(_username))
+      {
         firebase.auth().createUserWithEmailAndPassword(_email, _password).then(function(userCredential) {
             userCredential.user.updateProfile({
                 displayName: _username,
             });
+            firebase.firestore().collection("users").doc(_username).set({
+              fullName: _full_name,
+            });
+            Alert.alert('Sign Up Successful!', 'Welcome to Networktivity!');
         }).catch(function(error) {
             // Handle Errors here.
             var errorCode = error.code;
             var errorMessage = error.message;
             if (errorCode == 'auth/weak-password') {
-                alert('The password is too weak.');
+              Alert.alert('Sign Up Failed', 'Wrong password.');
             } else {
-                alert(errorMessage);
+              Alert.alert('Sign Up Failed', errorMessage);
             }
             console.log(error);
         });
+      }
+      else
+      {
+        Alert.alert('Sign Up Failed', "Username already taken.");
+      }
     }
 
     function _checkUsernameExists(name) {
       if (name.length > 0)
       {
-        print(firebase.firestore().collection("users"));
-        if (firebase.firestore().collection("users").doc(name).exists)
-        {
+        firebase.firestore().collection("users").doc(name).get().then(function(doc) {
+          if (doc.exists) {
             _setSignUpDisabled(true);
             _setUsernameEntryColor("#FFC0CB");
 
-            console.log("hi");
-        }
-        else
-        {
+            return true;
+          }
+          else
+          {
             _setSignUpDisabled(false);
             _setUsernameEntryColor("#CBC0FF");
 
-            console.log("bup");
-        }
-      }
+            return false;
+          }
+        }).catch();
 
-      console.log(name);
+        return false;
+      }
     }
  
     return (
@@ -74,11 +89,15 @@ function SignUpScreen() {
         />
         <TextInput
           style={styles.username}
-          placeholder='Username'
           backgroundColor={_usernameEntryColor}
+          placeholder='Username'
           autoCapitalize="none"
           placeholderTextColor="#003f5c"
-          onChangeText={(_username) => _setUsername(_username)}
+          onChangeText={(_username) => {
+              _setUsername(_username);
+              _checkUsernameExists(_username);
+            }
+          }
         />
         <TextInput
           style={styles.input}

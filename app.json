@@ -3,8 +3,9 @@
     "name": "networktivity",
     "slug": "networktivity",
     "version": "1.0.0",
+    "description": "My entry for the 2021 FBLA State Mobile Application Development Competition",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/networktivityicon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
