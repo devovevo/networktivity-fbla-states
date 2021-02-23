@@ -26,4 +26,4 @@ Well, my mind is abrim with ideas for the future of this app, but most likely it
 
 ## Final thoughts?
 
-I don't know you, but I hope you like this app. Irregardless, have a nice day, and if you have the time listen to some DEVO (my favorite band).
+I don't know you, but I hope you like this app. Irregardless, have a nice day, and if you have the time listen to some DEVO (my favorite band :<) >).
