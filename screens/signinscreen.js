@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
+import * as Google from 'expo-google-app-auth';
+
 import {
   StyleSheet,
   Text,
@@ -48,6 +50,22 @@ function SignInScreen({navigation}) {
         Alert.alert("Password reset", "Please enter an email in the email entry so that we can send you a password reset email.");
       }
     }
+
+    async function _signInWithGoogleAsync() {
+      try {
+        const result = await Google.logInAsync({
+          androidClientId: "516883900845-jfbmr348sq6ca81dlljrru7fqtct7s4i.apps.googleusercontent.com",
+          iosClientId: "516883900845-0q282hmcuqprkh3008kuqhnv3o38reb4.apps.googleusercontent.com",
+          scopes: ['profile', 'email'],
+        });
+    
+        if (result.type === 'success') {
+          firebase.auth().signInWithCredential(result);
+        }
+      } catch (e) {
+        return { error: true };
+      }
+    }
   
     return (
       <View style={styles.container}>
@@ -80,6 +98,10 @@ function SignInScreen({navigation}) {
   
         <TouchableOpacity style={styles.loginBtn} onPress={_attemptSignUserIn} >
           <Text>LOGIN</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.googleBtn} onPress={_signInWithGoogleAsync} >
+          <Text>Login with Google?</Text>
         </TouchableOpacity>
   
         <TouchableOpacity onPress={_goToSignUp}>
@@ -142,12 +164,21 @@ function SignInScreen({navigation}) {
       justifyContent: "center",
       marginTop: 40,
       backgroundColor: "#228B22",
-      marginBottom: 100,
+      marginBottom: 10,
     },
   
     signup_button: {
       height: 30,
       fontWeight: "bold",
+    },
+
+    googleBtn: {
+      width: "80%",
+      borderRadius: 25,
+      height: 50,
+      alignItems: "center",
+      justifyContent: "center",
+      marginBottom: 50,
     }
   });
 
