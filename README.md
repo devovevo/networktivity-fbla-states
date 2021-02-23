@@ -18,7 +18,7 @@ This project was made with hours of sweat and tears, as well as 4 rewrites (real
 
 ## I have the app downloaded, now what?
 
-Well eager beaver, now the fun begins! Start your journey by creating an account with the Sign Up button, and then feel free to check out the ability to update your personal info, post your thoughts and comments to others, and view other peoples profiles. The goal of this app was to create an application which could successfully allow people to post their interests and goals and find others who shared like-minded goals. Now, while it certainly isn't polished, I believe it has achieved this goal and could be used for this purpose.
+Well eager beaver, now the fun begins! Start your journey by creating an account with the Sign Up button, and then feel free to check out the ability to update your personal info, post your thoughts and comments to others, and view other peoples profiles. The goal of this app was to create an application which could successfully allow people to post their interests and goals and find others who shared like-minded goals. Now, while it certainly isn't polished, I believe it has achieved this goal and could be used for this purpose. PS Social media integration was added through Google Login (though it may be hard to see)
 
 ## What next?
 
