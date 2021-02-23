@@ -22,6 +22,7 @@ function PostListingScreen( {navigation} ) {
 
     const _currentUser = firebase.auth().currentUser;
 
+    //posts listing to firestore documents, adds it as new document with random ID
     function _postListing() {
         if (_currentUser != null)
         {
@@ -37,6 +38,7 @@ function PostListingScreen( {navigation} ) {
         }
     }
 
+    //returns view of the screen as HTML
     return (
         <View style={styles.container}>
           <Text style={styles.title}>Make Post</Text>

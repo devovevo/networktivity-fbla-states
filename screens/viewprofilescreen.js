@@ -28,6 +28,7 @@ function ViewProfileScreen( {route, navigation} ) {
     const _currentUser = firebase.auth().currentUser;
     const [_displayName, _setDisplayName] = useState("");
 
+    //returns all of the information about the selected profile from the firestore document
     firebase.firestore().collection("users").doc(userId).get().then(function(userDoc) {
         var userData = userDoc.data();
         
@@ -38,6 +39,7 @@ function ViewProfileScreen( {route, navigation} ) {
         _setContactInfo(userData.contactInfo);
     });
 
+    //returns view of the screen, HTML
     return (
         <View style={styles.container}>
           <Text style={styles.title}>{_profileName} ({userId})</Text>

@@ -17,6 +17,7 @@ import "firebase/auth";
 import "firebase/firestore";
   
  function UsersViewScreen({navigation}) {
+     //This is the base format of each listing to be displayed. Essentially, it shows how a listing should look like
     const Item = ({ username, fullName}) => (
         <View style={styles.item}>
           <Text style={styles.title}>User: {fullName} ({username})</Text>
@@ -33,8 +34,10 @@ import "firebase/firestore";
     const [_users, _setUsers] = useState([]);
     const _currentUser = firebase.auth().currentUser;
     
+    //again, error where info was gotten on user that didn't exist, fixed here
     if (_currentUser != null)
     {
+        //gets 20 user documents from firestore, used to just show what users are available on the platform
         firebase.firestore().collection("users").limit(20).get().then(function(query) {
             var userDocs = [];
             query.forEach(function(doc) {
@@ -52,8 +55,10 @@ import "firebase/firestore";
         }).catch();
     }
 
+    //tells the list renderer how it should display each listing, which we defined earlier with our item class
     const renderItem = ({ item }) => <Item username={item.username} fullName={item.fullName}/>;
   
+    //actual view of the screen
     return (
       <SafeAreaView style={styles.container}>
         <Text style={styles.header}>Users</Text>

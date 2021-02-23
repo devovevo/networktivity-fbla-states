@@ -17,6 +17,7 @@ import "firebase/auth";
 import "firebase/firestore";
   
  function ListingsViewScreen({navigation}) {
+    //viewmodel defining what each listing should look like
     const Item = ({ owner, fullName, title, description}) => (
         <View style={styles.item}>
           <Text style={styles.title}>Owner: {fullName} ({owner})</Text>
@@ -35,8 +36,10 @@ import "firebase/firestore";
     const [_listings, _setListings] = useState([]);
     const _currentUser = firebase.auth().currentUser;
     
+    //again, error where undefined user would be accessed, fixed here
     if (_currentUser != null)
     {
+        //gets 20 listings from firestore as long as they don't belong to the current user
         firebase.firestore().collection("listings").where("owner", "!=", _currentUser.displayName).limit(20).get().then(function(query) {
             var listingDocs = [];
             query.forEach(function(doc) {
@@ -55,8 +58,10 @@ import "firebase/firestore";
         }).catch();
     }
 
+    //defines how each item should be rendered, using viewmodel defined earlier
     const renderItem = ({ item }) => <Item title={item.title} description={item.description} owner={item.owner} fullName={item.fullName}/>;
   
+    //returns actual view of screen
     return (
       <SafeAreaView style={styles.container}>
         <Text style={styles.header}>Listings</Text>

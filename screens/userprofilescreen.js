@@ -25,8 +25,10 @@ function UserProfileScreen( {navigation} ) {
     const _currentUser = firebase.auth().currentUser;
     const [_displayName, _setDisplayName] = useState("");
 
+    //used to have error where no user would be signed in but would still attempt to get info, fixed with if statement
     if (_currentUser != null)
     {
+        //gets information about the users profile from Firestore document
         firebase.firestore().collection("users").doc(_currentUser.displayName).get().then(function (docData) {
             var userData = docData.data();
             if (_displayName == "")
@@ -40,6 +42,7 @@ function UserProfileScreen( {navigation} ) {
         }).catch();
     }
 
+    //updates the user's firestore document with their new info
     function _updateUserProfile() {
         if (_currentUser != null)
         {
@@ -52,6 +55,7 @@ function UserProfileScreen( {navigation} ) {
         }   
     }
 
+    //logs user out of their account
     function _logOut() {
         if (_currentUser != null)
         {
@@ -61,6 +65,7 @@ function UserProfileScreen( {navigation} ) {
         }
     }
 
+    //returns the actual view of the webpage in HTML
     return (
         <View style={styles.container}>
           <Text style={styles.title}>Welcome, {_displayName}</Text>

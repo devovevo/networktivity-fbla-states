@@ -22,8 +22,8 @@ function SignUpScreen() {
     const [_usernameEntryColor, _setUsernameEntryColor] = useState("#CBC0FF");
     const [_signUpDisabled, _setSignUpDisabled] = useState(true);
 
+    //attempts to create user with info given, will fail if password too weak, email already used, or username is taken
     function _attemptCreateUserAccount() {
-
       if (!_checkUsernameExists(_username))
       {
         firebase.auth().createUserWithEmailAndPassword(_email, _password).then(function(userCredential) {
@@ -52,6 +52,7 @@ function SignUpScreen() {
       }
     }
 
+    //searches the firestore "users" collection to see if username is already taken
     function _checkUsernameExists(name) {
       if (name.length > 0)
       {
@@ -75,6 +76,7 @@ function SignUpScreen() {
       }
     }
  
+    //returns the actual view of the screen
     return (
       <View style={styles.container}>
         <Image style={styles.image} source={require("../assets/networktivityicon.png")} />

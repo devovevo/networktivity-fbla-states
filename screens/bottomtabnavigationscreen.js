@@ -22,8 +22,10 @@ import ListingsViewScreen from './listingsviewscreen';
 import UsersViewScreen from './userviewscreen';
 
 function BottomTabNavigationScreen() {
+    //This is the tab at the bottom used to navigate the main screen
     const Tab = createMaterialBottomTabNavigator();
 
+    //this returns the actual view of the webpage, html
     return (
         <Tab.Navigator
         activeColor="#e91e63"

@@ -18,10 +18,12 @@ import {
 import firebase from "firebase/app";
 import "firebase/auth";
 
+//Screen to sign in
 function SignInScreen({navigation}) {
     const [_email, _setEmail] = useState("");
     const [_password, _setPassword] = useState("");
 
+    //attempts to sign user in
     function _attemptSignUserIn() {
         firebase.auth().signInWithEmailAndPassword(_email, _password).catch(function(error) {
             var errorCode = error.code;
@@ -35,10 +37,12 @@ function SignInScreen({navigation}) {
         });
     }
 
+    //go to sign up page
     function _goToSignUp() {
         navigation.navigate("Sign Up");
     }
 
+    //send password reset email
     function _resetPassword() {
       if (_email.length > 0)
       {
@@ -51,6 +55,8 @@ function SignInScreen({navigation}) {
       }
     }
 
+    //attempt to sign in with Google account -- VERY BUGGY
+    //TODO -- figure out how to make this feature more reliable
     async function _signInWithGoogleAsync() {
       try {
         const result = await Google.logInAsync({
@@ -67,6 +73,7 @@ function SignInScreen({navigation}) {
       }
     }
   
+    //This is the actual view of the page
     return (
       <View style={styles.container}>
         <Image style={styles.image} source={require("../assets/networktivityicon.png")} />

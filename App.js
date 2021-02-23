@@ -14,6 +14,7 @@ import "firebase/auth";
 
 const Stack = createStackNavigator();
 
+//info for initialization of firebase API with expo
 const firebaseConfig = {
   apiKey: "AIzaSyB7q02BPW3_dTCd-WE24ZTTaM0G479GtsA",
   authDomain: "networktivity.firebaseapp.com",
@@ -25,6 +26,7 @@ const firebaseConfig = {
   measurementId: "G-NNMDQM32TT"
 };
 
+//this way I can navigate pages without needing a navigation prop
 const navigationRef = React.createRef();
 
 function App() {
@@ -36,6 +38,7 @@ function App() {
     console.log(error);
   }
 
+  //when user signs in, redirect them to the main screen
   firebase.auth().onAuthStateChanged(user => {
     if (user != null) {
       navigationRef.current.navigate("Tab Navigation");
@@ -45,7 +48,8 @@ function App() {
       navigationRef.current.navigate("Sign In");
     }
   });
-
+  
+  //actual view of the page, pretty much just central navigation route
   return (
     <NavigationContainer ref={navigationRef}>
       <Stack.Navigator initialRouteName="Sign In">
