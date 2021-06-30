@@ -8,9 +8,13 @@ import SignInScreen from  './screens/signinscreen';
 import SignUpScreen from './screens/signupscreen';
 import BottomTabNavigationScreen from './screens/bottomtabnavigationscreen';
 import ViewProfileScreen from './screens/viewprofilescreen';
+import UserProfileScreen from './screens/userprofilescreen';
 
 import firebase from "firebase/app";
 import "firebase/auth";
+
+import { AppRegistry } from "react-native";
+import userprofilescreen from "./screens/userprofilescreen";
 
 const Stack = createStackNavigator();
 
@@ -29,7 +33,7 @@ const firebaseConfig = {
 //this way I can navigate pages without needing a navigation prop
 const navigationRef = React.createRef();
 
-function App() {
+const Networktivity = () => {
   try {
     firebase.app();
   }
@@ -52,16 +56,16 @@ function App() {
   //actual view of the page, pretty much just central navigation route
   return (
     <NavigationContainer ref={navigationRef}>
-      <Stack.Navigator initialRouteName="Sign In">
+      <Stack.Navigator initialRouteName="Tab Navigation">
         <Stack.Screen 
           name="Sign In" 
           component={SignInScreen} 
-          options={{ title: 'Sign In', headerTransparent: true } }
+          options={{ title: 'Sign In', headerShown: false } }
         />
         <Stack.Screen 
           name="Sign Up" 
           component={SignUpScreen}
-          options={{ title: 'Sign Up', headerTransparent: true } }
+          options={{ title: 'Sign Up', headerShown: false } }
         />
         <Stack.Screen 
           name="Tab Navigation" 
@@ -70,7 +74,7 @@ function App() {
         />
         <Stack.Screen 
           name="View Profile" 
-          component={ViewProfileScreen}
+          component={UserProfileScreen}
           options={{ title: '', headerTransparent: true } }
         />
       </Stack.Navigator>
@@ -78,4 +82,4 @@ function App() {
   );
 }
 
-export default App;
+export default Networktivity;

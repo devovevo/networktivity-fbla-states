@@ -45,13 +45,12 @@ function ViewProfileScreen( {route, navigation} ) {
           <Text style={styles.title}>{_profileName} ({userId})</Text>
     
           <StatusBar style="auto" />
-          <Text style={styles.header}>Biography: {_biography}</Text>
-        
-          <Text style={styles.header}>Profession: {_profession}</Text>
-        
-          <Text style={styles.header}>Education: {_education}</Text>
-          
-          <Text style={styles.header}>Contact Info: {_contactInfo}</Text>
+          <Text style={styles.header}>
+            Biography: {_biography}{'\n'}
+            Profession: {_profession}{'\n'}
+            Education: {_education}{'\n'}
+            Contact Info: {_contactInfo}{'\n'}
+          </Text>
           
         </View>
     );
@@ -74,44 +73,6 @@ const styles = StyleSheet.create({
     header: {
       marginStart: 35,
       fontSize: 40,
-      height: 60,
-      marginBottom: 20,
-    },
-  
-    inputViewBiography: {
-      backgroundColor: "#CBC0FF",
-      marginStart: 35,
-      width: "90%",
-      height: 200,
-      marginBottom: 20,
-    },
-
-    inputViewRegular: {
-      backgroundColor: "#CBC0FF",
-      marginStart: 35,
-      width: "90%",
-      height: 50,
-      marginBottom: 20,
-    },
-  
-    TextInput: {
-      height: "100%",
-      width: "100%",
-      flex: 1,
-      padding: 10,
-      marginLeft: 20,
-    },
-
-    logoutBtn: {
-        width: "50%",
-        borderRadius: 25,
-        height: 50,
-        alignSelf: "center",
-        marginTop: 25,
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#228B22",
-        marginBottom: 100,
     },
 });
 

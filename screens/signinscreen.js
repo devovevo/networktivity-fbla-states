@@ -1,192 +1,141 @@
-import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
+import { ButtonSolid, Link, ScreenContainer, withTheme } from '@draftbit/ui';
+import { Image, ImageBackground, StyleSheet, TextInput } from 'react-native';
 
-import * as Google from 'expo-google-app-auth';
+const SignInScreen = props => {
+  const { theme } = props;
+  const { navigation } = props;
 
-import {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  Alert,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+  const [usernameInputValue, setUsernameInputValue] = React.useState('');
+  const [passwordInputValue, setPasswordInputValue] = React.useState('');
 
-import firebase from "firebase/app";
-import "firebase/auth";
-
-//Screen to sign in
-function SignInScreen({navigation}) {
-    const [_email, _setEmail] = useState("");
-    const [_password, _setPassword] = useState("");
-
-    //attempts to sign user in
-    function _attemptSignUserIn() {
-        firebase.auth().signInWithEmailAndPassword(_email, _password).catch(function(error) {
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            if (errorCode === 'auth/wrong-password') {
-                Alert.alert('Login Failed', 'Wrong password.');
-            } else {
-                Alert.alert('Login Failed', errorMessage);
+  return (
+    <ScreenContainer hasSafeArea={false} scrollable={false}>
+      <ImageBackground
+        style={styles.ImageBackgroundoh}
+        source={require("../assets/5124620.png")}
+        resizeMode="cover"
+      >
+        <Image
+          style={styles.ImageRa}
+          source={require("../assets/output-onlinepngtools.png")}
+          resizeMode="cover"
+        />
+        <Image
+          style={styles.ImageRZ}
+          resizeMode="cover"
+          source={require("../assets/text-1623352562189.png")}
+        />
+        <TextInput
+          style={[
+            styles.TextInputm6,
+            { backgroundColor: theme.colors.background, borderRadius: 54 },
+          ]}
+          placeholder="Username"
+          value={usernameInputValue}
+          onChangeText={usernameInputValue => setUsernameInputValue(usernameInputValue)}
+          numberOfLines={1}
+          keyboardAppearance="default"
+          maxLength={30}
+          placeholderTextColor={theme.colors.strong}
+        />
+        <TextInput
+          style={[
+            styles.TextInputOr,
+            { backgroundColor: theme.colors.background, borderRadius: 54 },
+          ]}
+          placeholder="Password"
+          value={passwordInputValue}
+          onChangeText={passwordInputValue => setPasswordInputValue(passwordInputValue)}
+          numberOfLines={1}
+          keyboardAppearance="default"
+          maxLength={30}
+          placeholderTextColor={theme.colors.strong}
+          secureTextEntry={true}
+        />
+        <ButtonSolid
+          style={[
+            styles.ButtonSolidYZ,
+            {
+              backgroundColor: theme.colors.primary,
+              borderRadius: 64,
+              color: theme.colors.divider,
+            },
+          ]}
+          title="Log In"
+        >
+          {`Sign Up`}
+        </ButtonSolid>
+        <Link
+          style={[styles.LinkvJ, { color: theme.colors.medium }]}
+          title="No account? Create one here"
+          onPress={() => {
+            try {
+              navigation.navigate('Sign Up', {});
+            } catch (err) {
+              console.error(err);
             }
-            console.log(error);
-        });
-    }
+          }}
+        />
+      </ImageBackground>
+    </ScreenContainer>
+  );
+};
 
-    //go to sign up page
-    function _goToSignUp() {
-        navigation.navigate("Sign Up");
-    }
+const styles = StyleSheet.create({
+  ImageRa: {
+    width: '75%',
+    height: '32%',
+  },
+  ImageRZ: {
+    marginTop: '5%',
+    width: '82%',
+    height: '13%',
+  },
+  TextInputm6: {
+    textAlign: 'center',
+    opacity: 0.42,
+    fontSize: 20,
+    marginTop: '12%',
+    width: '80%',
+    height: '6%',
+  },
+  TextInputOr: {
+    textAlign: 'center',
+    opacity: 0.42,
+    fontSize: 20,
+    marginTop: '12%',
+    width: '80%',
+    height: '6%',
+  },
+  ButtonSolidYZ: {
+    textAlign: 'center',
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 60,
+    paddingRight: 60,
+    fontSize: 20,
+    marginTop: '12%',
+    fontFamily: 'System',
+    fontWeight: '700',
+  },
+  LinkvJ: {
+    backgroundColor: 'transparent',
+    borderRadius: 8,
+    padding: 0,
+    textDecorationLine: 'underline',
+    marginTop: '17%',
+    fontSize: 16,
+    fontFamily: 'System',
+    fontWeight: '700',
+  },
+  ImageBackgroundoh: {
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexGrow: 1,
+  },
+});
 
-    //send password reset email
-    function _resetPassword() {
-      if (_email.length > 0)
-      {
-        firebase.auth().sendPasswordResetEmail(_email);
-        Alert.alert("Password reset", "An email has been sent to the provided email on how to reset your password.");
-      }
-      else
-      {
-        Alert.alert("Password reset", "Please enter an email in the email entry so that we can send you a password reset email.");
-      }
-    }
-
-    //attempt to sign in with Google account -- VERY BUGGY
-    //TODO -- figure out how to make this feature more reliable
-    async function _signInWithGoogleAsync() {
-      try {
-        const result = await Google.logInAsync({
-          androidClientId: "516883900845-jfbmr348sq6ca81dlljrru7fqtct7s4i.apps.googleusercontent.com",
-          iosClientId: "516883900845-0q282hmcuqprkh3008kuqhnv3o38reb4.apps.googleusercontent.com",
-          scopes: ['profile', 'email'],
-        });
-    
-        if (result.type === 'success') {
-          firebase.auth().signInWithCredential(result);
-        }
-      } catch (e) {
-        return { error: true };
-      }
-    }
-  
-    //This is the actual view of the page
-    return (
-      <View style={styles.container}>
-        <Image style={styles.image} source={require("../assets/networktivityicon.png")} />
-        <Text style={styles.title} >Networktivity</Text>
-  
-        <StatusBar style="auto" />
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Email"
-            placeholderTextColor="#003f5c"
-            onChangeText={(_email) => _setEmail(_email)}
-          />
-        </View>
-  
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.TextInput}
-            placeholder="Password"
-            placeholderTextColor="#003f5c"
-            secureTextEntry={true}
-            onChangeText={(_password) => _setPassword(_password)}
-          />
-        </View>
-  
-        <TouchableOpacity onPress={_resetPassword}>
-          <Text style={styles.forgot_button}>Forgot Password?</Text>
-        </TouchableOpacity>
-  
-        <TouchableOpacity style={styles.loginBtn} onPress={_attemptSignUserIn} >
-          <Text>LOGIN</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.googleBtn} onPress={_signInWithGoogleAsync} >
-          <Text>Login with Google?</Text>
-        </TouchableOpacity>
-  
-        <TouchableOpacity onPress={_goToSignUp}>
-          <Text style={styles.signup_button}>No account? Sign up</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
-  
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "#fff",
-      alignItems: "center",
-      justifyContent: "center",
-    },
-  
-    image: {
-      marginTop: 40,  
-      height: 300,
-      width: 300,
-      marginBottom: 10,
-    },
-  
-    title: {
-      fontSize: 50,
-      height: 120,
-      marginBottom: 40,
-    },
-  
-    inputView: {
-      backgroundColor: "#CBC0FF",
-      borderRadius: 30,
-      width: "70%",
-      height: 60,
-      marginBottom: 30,
-  
-      alignItems: "center",
-    },
-  
-    TextInput: {
-      height: 50,
-      width: "100%",
-      textAlign: "center",
-      flex: 1,
-      padding: 10,
-      marginLeft: 20,
-    },
-  
-    forgot_button: {
-      height: 30,
-      marginBottom: 30,
-    },
-  
-    loginBtn: {
-      width: "80%",
-      borderRadius: 25,
-      height: 50,
-      alignItems: "center",
-      justifyContent: "center",
-      marginTop: 40,
-      backgroundColor: "#228B22",
-      marginBottom: 10,
-    },
-  
-    signup_button: {
-      height: 30,
-      fontWeight: "bold",
-    },
-
-    googleBtn: {
-      width: "80%",
-      borderRadius: 25,
-      height: 50,
-      alignItems: "center",
-      justifyContent: "center",
-      marginBottom: 50,
-    }
-  });
-
-  export default SignInScreen;
+export default withTheme(SignInScreen);

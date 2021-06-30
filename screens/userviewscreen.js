@@ -41,11 +41,11 @@ import "firebase/firestore";
         firebase.firestore().collection("users").limit(20).get().then(function(query) {
             var userDocs = [];
             query.forEach(function(doc) {
-                var userData = doc.data();
-                userDocs.push(userData);
-                userDocs[userDocs.length - 1].username = doc.id;
-
-                console.log(userDocs[userDocs.length - 1]);
+                if (doc.id != _currentUser.displayName) {
+                  var userData = doc.data();
+                  userDocs.push(userData);
+                  userDocs[userDocs.length - 1].username = doc.id;
+                }
             });
 
             if (userDocs.length != _users.length)

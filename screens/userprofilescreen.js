@@ -1,183 +1,263 @@
-import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import React from 'react';
 import {
+  ButtonOutline,
+  IconButton,
+  ScreenContainer,
+  Touchable,
+  CircleImage,
+  withTheme,
+} from '@draftbit/ui';
+import {
+  FlatList,
+  Image,
   StyleSheet,
   Text,
-  View,
-  Image,
-  Alert,
   TextInput,
-  TouchableOpacity,
-} from "react-native";
+  View,
+} from 'react-native';
 
-import firebase from "firebase/app";
-import "firebase/auth";
-import "firebase/firestore";
+const AccountScreen = props => {
+  const { theme } = props;
 
-function UserProfileScreen( {navigation} ) {
-    const [_biography, _setBiography] = useState("");
-    const [_profession, _setProfession] = useState("");
-    const [_education, _setEducation] = useState("");
-    const [_contactInfo, _setContactInfo] = useState("");
+  const [textInputValue, setTextInputValue] = React.useState('');
 
-    const _currentUser = firebase.auth().currentUser;
-    const [_displayName, _setDisplayName] = useState("");
+  const list = [{
+    url: "https://thumbor.forbes.com/thumbor/fit-in/1200x0/filters%3Aformat%28jpg%29/https%3A%2F%2Fspecials-images.forbesimg.com%2Fimageserve%2F6012d1658ec58b0085e29334%2F0x0.jpg",
+    title: "hi",
+    key: "Ab7",
+    description: "H58",
+  }];
 
-    //used to have error where no user would be signed in but would still attempt to get info, fixed with if statement
-    if (_currentUser != null)
-    {
-        //gets information about the users profile from Firestore document
-        firebase.firestore().collection("users").doc(_currentUser.displayName).get().then(function (docData) {
-            var userData = docData.data();
-            if (_displayName == "")
-            {
-                _setDisplayName(userData.fullName);
-                _setBiography(userData.biography);
-                _setProfession(userData.profession);
-                _setEducation(userData.education);
-                _setContactInfo(userData.contactInfo);
-            }
-        }).catch();
-    }
-
-    //updates the user's firestore document with their new info
-    function _updateUserProfile() {
-        if (_currentUser != null)
-        {
-            firebase.firestore().collection("users").doc(_currentUser.displayName).update({
-                biography: _biography,
-                profession: _profession,
-                education: _education,
-                contactInfo: _contactInfo,
-            }).catch();
-        }   
-    }
-
-    //logs user out of their account
-    function _logOut() {
-        if (_currentUser != null)
-        {
-            firebase.auth().signOut().catch(function(error) {
-                console.log(error);
-            });
-        }
-    }
-
-    //returns the actual view of the webpage in HTML
-    return (
-        <View style={styles.container}>
-          <Text style={styles.title}>Welcome, {_displayName}</Text>
-    
-          <StatusBar style="auto" />
-          <Text style={styles.header}>Biography</Text>
-          <View style={styles.inputViewBiography}>
-            <TextInput
-              style={styles.TextInput}
-              placeholder="Tell us about yourself."
-              placeholderTextColor="#003f5c"
-              value={_biography}
-              onEndEditing={_updateUserProfile}
-              onChangeText={(_biography) => _setBiography(_biography)}
-            />
+  return (
+    <ScreenContainer style={styles.ScreenContainer_0E}>
+      <View style={styles.View_9q} pointerEvents="auto">
+        <View style={styles.Viewcz} pointerEvents="auto">
+          <View style={styles.ViewXZ} pointerEvents="auto">
+            <Text
+              style={[styles.Textdk, { color: theme.colors.strong }]}
+              numberOfLines={1}
+              ellipsizeMode="clip"
+            >
+              {'evan.vera@hotmail.com'}
+            </Text>
           </View>
-          <Text style={styles.header}>Profession</Text>
-          <View style={styles.inputViewRegular}>
-            <TextInput
-              style={styles.TextInput}
-              placeholder="What do you do?"
-              placeholderTextColor="#003f5c"
-              value={_profession}
-              onEndEditing={_updateUserProfile}
-              onChangeText={(_profession) => _setProfession(_profession)}
-            />
+
+          <View style={styles.ViewKe} pointerEvents="auto">
+            <IconButton icon="Ionicons/md-settings-outline" size={32} />
           </View>
-          <Text style={styles.header}>Education</Text>
-          <View style={styles.inputViewRegular}>
-            <TextInput
-              style={styles.TextInput}
-              placeholder="Where did you go to school?"
-              placeholderTextColor="#003f5c"
-              value={_education}
-              onEndEditing={_updateUserProfile}
-              onChangeText={(_education) => _setEducation(_education)}
-            />
-          </View>
-          <Text style={styles.header}>Contact Info</Text>
-          <View style={styles.inputViewRegular}>
-            <TextInput
-              style={styles.TextInput}
-              placeholder="How can people reach you?"
-              value={_contactInfo}
-              placeholderTextColor="#003f5c"
-              onEndEditing={_updateUserProfile}
-              onChangeText={(_contactInfo) => _setContactInfo(_contactInfo)}
-            />
-          </View>
-            <TouchableOpacity style={styles.logoutBtn} onPress={_logOut}>
-                <Text>LOGOUT</Text>
-            </TouchableOpacity>
         </View>
-    );
-}
+
+        <View style={styles.ViewMr} pointerEvents="auto">
+          <Touchable>
+            <Image
+              style={styles.ImageOU}
+              source={{
+                uri: 'https://static.draftbit.com/images/placeholder-image.png',
+              }}
+              resizeMode="cover"
+            />
+          </Touchable>
+
+          <Text style={[styles.TextzB, { color: theme.colors.strong }]}>
+            {'0 Posts'}
+          </Text>
+
+          <Text style={[styles.TextWF, { color: theme.colors.strong }]}>
+            {'0 Friends'}
+          </Text>
+        </View>
+
+        <View style={styles.View_2w} pointerEvents="auto">
+          <TextInput
+            style={[styles.TextInputOa, { color: theme.colors.strong }]}
+            placeholder="Evan Vera"
+            value={textInputValue}
+            onChangeText={textInputValue => setTextInputValue(textInputValue)}
+            placeholderTextColor={theme.colors.strong}
+          />
+          <TextInput
+            style={[styles.TextInputau, { color: theme.colors.strong }]}
+            placeholder="Expert Plumber"
+            value={textInputValue}
+            onChangeText={textInputValue => setTextInputValue(textInputValue)}
+            placeholderTextColor={theme.colors.strong}
+          />
+          <TextInput
+            style={[styles.TextInputJl, { color: theme.colors.strong }]}
+            placeholder="Bachelor's from Harvard University"
+            value={textInputValue}
+            onChangeText={textInputValue => setTextInputValue(textInputValue)}
+            placeholderTextColor={theme.colors.strong}
+          />
+          <TextInput
+            style={[styles.TextInputny, { color: theme.colors.strong }]}
+            placeholder="Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+            value={textInputValue}
+            onChangeText={textInputValue => setTextInputValue(textInputValue)}
+            placeholderTextColor={theme.colors.strong}
+            multiline={true}
+          />
+        </View>
+
+        <ButtonOutline style={styles.ButtonOutline_68} title="Edit Profile">
+          {`Log In`}
+        </ButtonOutline>
+
+        <View style={styles.ViewF0} pointerEvents="auto">
+          <Text style={[styles.Textgp, { color: theme.colors.strong }]}>
+            {'Your Posts'}
+          </Text>
+          <FlatList
+            data={list}
+            renderItem={({ item }) => (
+              <View style={styles.Viewvv} pointerEvents="auto">
+                <View style={styles.ViewlZ} pointerEvents="auto">
+                  <CircleImage
+                    source={{
+                      uri: 'https://static.draftbit.com/images/placeholder-image.png',
+                    }}
+                    size={60}
+                  />
+                  <View style={styles.ViewhX} pointerEvents="auto">
+                    <Text style={[styles.Textqs, { color: theme.colors.strong }]}>
+                      {'Evan Vera'}
+                    </Text>
+
+                    <Text
+                      style={[styles.TextgJ, { color: theme.colors.strong }]}
+                      numberOfLines={3}
+                    >
+                      {'Looking for Experienced Taxidermists'}
+                    </Text>
+                  </View>
+                </View>
+                <Image
+                  style={styles.Imagego}
+                  source={{
+                    uri: 'https://static.draftbit.com/images/placeholder-image.png',
+                  }}
+                  resizeMode="cover"
+                />
+              </View>
+            )}
+            contentContainerStyle={styles.FlatListPF}
+            numColumns={1}
+          />
+        </View>
+      </View>
+    </ScreenContainer>
+  );
+};
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "#fff",
-    },
-  
-    title: {
-      textAlign: "center",
-      marginTop: 60,
-      fontSize: 50,
-      height: 80,
-      marginBottom: 20,
-    },
-
-    header: {
-      marginStart: 35,
-      fontSize: 40,
-      height: 60,
-      marginBottom: 20,
-    },
-  
-    inputViewBiography: {
-      backgroundColor: "#CBC0FF",
-      marginStart: 35,
-      width: "90%",
-      height: 200,
-      marginBottom: 20,
-    },
-
-    inputViewRegular: {
-      backgroundColor: "#CBC0FF",
-      marginStart: 35,
-      width: "90%",
-      height: 50,
-      marginBottom: 20,
-    },
-  
-    TextInput: {
-      height: "100%",
-      width: "100%",
-      flex: 1,
-      padding: 10,
-      marginLeft: 20,
-    },
-
-    logoutBtn: {
-        width: "50%",
-        borderRadius: 25,
-        height: 50,
-        alignSelf: "center",
-        marginTop: 25,
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#228B22",
-        marginBottom: 100,
-    },
+  Textdk: {
+    fontSize: 20,
+    textAlign: 'center',
+    fontFamily: 'System',
+    fontWeight: '700',
+  },
+  ViewXZ: {
+    width: '80%',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    height: 50,
+  },
+  ViewKe: {
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    width: 50,
+    height: 50,
+  },
+  Viewcz: {
+    flexDirection: 'row',
+    marginTop: '12%',
+    width: '95%',
+    height: 50,
+  },
+  ImageOU: {
+    width: 100,
+    height: 100,
+  },
+  TextzB: {
+    marginLeft: 30,
+    fontSize: 18,
+    fontFamily: 'System',
+    fontWeight: '700',
+  },
+  TextWF: {
+    marginLeft: 30,
+    fontSize: 18,
+    fontFamily: 'System',
+    fontWeight: '700',
+  },
+  ViewMr: {
+    flexDirection: 'row',
+    marginTop: '5%',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+  },
+  TextInputOa: {
+    textAlign: 'left',
+    fontSize: 20,
+    fontFamily: 'System',
+    fontWeight: '700',
+  },
+  TextInputau: {
+    textAlign: 'left',
+    fontSize: 18,
+    fontFamily: 'System',
+    fontWeight: '400',
+  },
+  TextInputJl: {
+    textAlign: 'left',
+    fontSize: 18,
+    fontFamily: 'System',
+    fontWeight: '400',
+  },
+  TextInputny: {
+    textAlign: 'left',
+    fontSize: 15,
+    marginTop: 15,
+    fontFamily: 'System',
+    fontWeight: '400',
+  },
+  View_2w: {
+    minHeight: 50,
+    marginTop: '5%',
+    width: 330,
+  },
+  ButtonOutline_68: {
+    backgroundColor: 'transparent',
+    borderRadius: 8,
+    borderWidth: 1,
+    textAlign: 'center',
+    marginTop: '6%',
+    fontFamily: 'System',
+    fontWeight: '700',
+  },
+  Textgp: {
+    textAlign: 'center',
+    fontSize: 20,
+    marginBottom: 10,
+    fontFamily: 'System',
+    fontWeight: '600',
+  },
+  FlatListPF: {
+    flex: 1,
+  },
+  ViewF0: {
+    width: 350,
+    height: 270,
+    marginTop: '6%',
+  },
+  View_9q: {
+    minHeight: 50,
+    flexGrow: 1,
+    alignItems: 'center',
+  },
+  ScreenContainer_0E: {
+    alignItems: 'center',
+  },
 });
 
-export default UserProfileScreen;
+export default withTheme(AccountScreen);

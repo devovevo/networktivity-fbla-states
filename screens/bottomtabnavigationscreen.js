@@ -12,6 +12,7 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import { Icon } from '@draftbit/ui';
 
 import firebase from "firebase/app";
 import "firebase/auth";

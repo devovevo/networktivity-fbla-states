@@ -1,177 +1,333 @@
-import React, { useState } from "react";
+import React from 'react';
 import {
-  View,
-  TouchableOpacity,
-  TextInput,
-  Text,
+  ButtonSolid,
+  Icon,
+  ScreenContainer,
+  withTheme,
+} from '@draftbit/ui';
+import {
+  ImageBackground,
   StyleSheet,
+  Text,
+  TextInput,
+  View,
+  ScrollView,
   Alert,
-  Image
-} from 'react-native'
+} from 'react-native';
 
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";
 
-function SignUpScreen() {
-    const [_email, _setEmail] = useState("");
-    const [_password, _setPassword] = useState("");
-    const [_username, _setUsername] = useState("");
-    const [_full_name, _setFullName] = useState("");
-    
-    const [_usernameEntryColor, _setUsernameEntryColor] = useState("#CBC0FF");
-    const [_signUpDisabled, _setSignUpDisabled] = useState(true);
+const SignUpScreen = props => {
+  const { theme } = props;
 
-    //attempts to create user with info given, will fail if password too weak, email already used, or username is taken
-    function _attemptCreateUserAccount() {
-      if (!_checkUsernameExists(_username))
-      {
-        firebase.auth().createUserWithEmailAndPassword(_email, _password).then(function(userCredential) {
-            userCredential.user.updateProfile({
-                displayName: _username,
-            });
-            firebase.firestore().collection("users").doc(_username).set({
-              fullName: _full_name,
-            });
-            Alert.alert('Sign Up Successful!', 'Welcome to Networktivity!');
-        }).catch(function(error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            if (errorCode == 'auth/weak-password') {
-              Alert.alert('Sign Up Failed', 'Wrong password.');
-            } else {
-              Alert.alert('Sign Up Failed', errorMessage);
-            }
-            console.log(error);
-        });
-      }
-      else
-      {
-        Alert.alert('Sign Up Failed', "Username already taken.");
-      }
-    }
+  const [_fullNameInputValue, _setFullNameInputValue] = React.useState('');
+  const [_usernameInputValue, _setUsernameInputValue] = React.useState('');
+  const [_emailInputValue, _setEmailInputValue] = React.useState('');
+  const [_passwordInputValue, _setPasswordInputValue] = React.useState('');
+  const [_professionInputValue, _setProfessionInputValue] = React.useState('');
+  const [_experienceInputValue, _setExperienceInputValue] = React.useState('');
 
-    //searches the firestore "users" collection to see if username is already taken
-    function _checkUsernameExists(name) {
-      if (name.length > 0)
-      {
-        firebase.firestore().collection("users").doc(name).get().then(function(doc) {
-          if (doc.exists) {
-            _setSignUpDisabled(true);
-            _setUsernameEntryColor("#FFC0CB");
+  return (
+    <ScreenContainer hasSafeArea={true} scrollable={false}>
+      <ImageBackground
+        style={styles.ImageBackground_5o}
+        source={require("../assets/5124620.png")}
+        resizeMode="cover"
+      >
+        <ScrollView
+          style={styles.ScrollView}
+          contentContainerStyle={styles.ScrollViewContainerStyle}
+        >
+          <View style={styles.View_7Z} pointerEvents="auto">
+            <Icon name="Entypo/circle" color={theme.colors.medium} size={60} />
+            <Icon name="AntDesign/minus" color={theme.colors.medium} size={60} />
+            <Icon name="Entypo/time-slot" color={theme.colors.medium} size={60} />
+            <Icon name="AntDesign/minus" color={theme.colors.medium} size={60} />
+            <Icon
+              color={theme.colors.medium}
+              size={60}
+              name="AntDesign/checkcircle"
+            />
+          </View>
 
-            return true;
-          }
-          else
-          {
-            _setSignUpDisabled(false);
-            _setUsernameEntryColor("#CBC0FF");
+          <Text style={[styles.Textew, { color: theme.colors.divider }]}>
+            {'Welcome\n'}
+          </Text>
 
-            return false;
-          }
-        }).catch();
+          <View
+            style={[
+              styles.ViewU6,
+              { borderRadius: 10, backgroundColor: theme.colors.light },
+            ]}
+            pointerEvents="auto"
+          >
+            <Icon
+              style={styles.IconcY}
+              name="MaterialCommunityIcons/card-account-details"
+              color={theme.colors.strong}
+              size={35}
+            />
+            <TextInput
+              style={[styles.TextInputKr, { color: theme.colors.background }]}
+              placeholder="Full Name"
+              value={_fullNameInputValue}
+              onChangeText={_fullNameInputValue => _setFullNameInputValue(_fullNameInputValue)}
+              placeholderTextColor={theme.colors.background}
+            />
+          </View>
 
-        return false;
-      }
-    }
- 
-    //returns the actual view of the screen
-    return (
-      <View style={styles.container}>
-        <Image style={styles.image} source={require("../assets/networktivityicon.png")} />
-        <Text style={styles.title}>Networktivity</Text>
+          <View
+            style={[
+              styles.Viewaa,
+              { borderRadius: 10, backgroundColor: theme.colors.light },
+            ]}
+            pointerEvents="auto"
+          >
+            <Icon
+              style={styles.Iconje}
+              color={theme.colors.strong}
+              size={40}
+              name="MaterialCommunityIcons/rename-box"
+            />
+            <TextInput
+              style={[styles.TextInput_7N, { color: theme.colors.background }]}
+              placeholder="Username"
+              value={_usernameInputValue}
+              onChangeText={_usernameInputValue => _setUsernameInputValue(_usernameInputValue)}
+              placeholderTextColor={theme.colors.background}
+            />
+          </View>
 
-        <TextInput
-          style={styles.input}
-          placeholder='Full Name'
-          autoCapitalize="none"
-          placeholderTextColor="#003f5c"
-          onChangeText={(_full_name) => _setFullName(_full_name)}
-        />
-        <TextInput
-          style={styles.username}
-          backgroundColor={_usernameEntryColor}
-          placeholder='Username'
-          autoCapitalize="none"
-          placeholderTextColor="#003f5c"
-          onChangeText={(_username) => {
-              _setUsername(_username);
-              _checkUsernameExists(_username);
-            }
-          }
-        />
-        <TextInput
-          style={styles.input}
-          placeholder='Password'
-          secureTextEntry={true}
-          autoCapitalize="none"
-          placeholderTextColor="#003f5c"
-          onChangeText={(_password) => _setPassword(_password)}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder='Email'
-          autoCapitalize="none"
-          placeholderTextColor="#003f5c"
-          onChangeText={(_email) => _setEmail(_email)}
-        />
-        <TouchableOpacity style={styles.signup_button} disabled={_signUpDisabled} onPress={_attemptCreateUserAccount}>
-          <Text>Sign Up</Text>
-        </TouchableOpacity>
-      </View>
-    );
-}
+          <View
+            style={[
+              styles.Viewaa,
+              { borderRadius: 10, backgroundColor: theme.colors.light },
+            ]}
+            pointerEvents="auto"
+          >
+            <Icon
+              style={styles.Iconje}
+              color={theme.colors.strong}
+              size={40}
+              name="MaterialCommunityIcons/email"
+            />
+            <TextInput
+              style={[styles.TextInput_7N, { color: theme.colors.background }]}
+              placeholder="Email"
+              value={_emailInputValue}
+              onChangeText={_emailInputValue => _setEmailInputValue(_emailInputValue)}
+              placeholderTextColor={theme.colors.background}
+            />
+          </View>
+
+          <View
+            style={[
+              styles.Viewaa,
+              { borderRadius: 10, backgroundColor: theme.colors.light },
+            ]}
+            pointerEvents="auto"
+          >
+            <Icon
+              style={styles.Iconje}
+              color={theme.colors.strong}
+              size={40}
+              name="MaterialCommunityIcons/form-textbox-password"
+            />
+            <TextInput
+              style={[styles.TextInput_7N, { color: theme.colors.background }]}
+              placeholder="Password"
+              secureTextEntry={true}
+              value={_passwordInputValue}
+              onChangeText={_passwordInputValue => _setPasswordInputValue(_passwordInputValue)}
+              placeholderTextColor={theme.colors.background}
+            />
+          </View>
+
+          <View
+            style={[
+              styles.Viewaa,
+              { borderRadius: 10, backgroundColor: theme.colors.light },
+            ]}
+            pointerEvents="auto"
+          >
+            <Icon
+              style={styles.IconG5}
+              color={theme.colors.strong}
+              size={40}
+              name="MaterialIcons/work"
+            />
+            <TextInput
+              style={[styles.TextInput_7N, { color: theme.colors.background }]}
+              placeholder="Profession"
+              value={_professionInputValue}
+              onChangeText={_professionInputValue => _setProfessionInputValue(_professionInputValue)}
+              placeholderTextColor={theme.colors.background}
+            />
+          </View>
+
+          <View
+            style={[
+              styles.Viewaa,
+              { borderRadius: 10, backgroundColor: theme.colors.light },
+            ]}
+            pointerEvents="auto"
+          >
+            <Icon
+              style={styles.IconCF}
+              color={theme.colors.strong}
+              size={40}
+              name="Feather/award"
+            />
+            <TextInput
+              style={[styles.TextInput_7N, { color: theme.colors.background }]}
+              placeholder="Experience"
+              value={_experienceInputValue}
+              onChangeText={_experienceInputValue => _setExperienceInputValue(_experienceInputValue)}
+              placeholderTextColor={theme.colors.background}
+            />
+          </View>
+
+          <ButtonSolid
+            style={[
+              styles.ButtonSolidvy,
+              {
+                backgroundColor: theme.colors.primary,
+                borderRadius: 64,
+                color: theme.colors.divider,
+              },
+            ]}
+            title="Sign Up"
+          >
+            {`Sign Up`}
+          </ButtonSolid>
+        </ScrollView>
+      </ImageBackground>
+    </ScreenContainer>
+  );
+};
 
 const styles = StyleSheet.create({
-  input: {
-    backgroundColor: "#CBC0FF",
-    borderRadius: 30,
-    width: "70%",
-    height: 60,
-    marginBottom: 40,
-    textAlign: "center",
-  
-    alignItems: "center",
+  View_7Z: {
+    minHeight: 50,
+    flexDirection: 'row',
   },
-  username: {
-    borderRadius: 30,
-    width: "70%",
-    height: 60,
-    marginBottom: 40,
-    textAlign: "center",
-  
-    alignItems: "center",
-  },
-  container: {
-    backgroundColor: "#fff",
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  image: {
-    marginTop: 80,
-    height: 150,
-    width: 150,
-    marginBottom: 10,
-  },
-
-  title: {
+  Textew: {
     fontSize: 50,
-    height: 120,
-    marginBottom: 30,
+    marginTop: '7%',
+    fontFamily: 'System',
+    fontWeight: '600',
   },
-
-  signup_button: {
-    width: "80%",
-    borderRadius: 25,
+  IconcY: {
+    marginTop: 5,
+  },
+  TextInputKr: {
+    width: 250,
+    marginLeft: 20,
+    fontSize: 25,
+  },
+  ViewU6: {
+    flexDirection: 'row',
+    opacity: 0.61,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 10,
+    paddingBottom: 10,
+    marginTop: '-6%',
+  },
+  Iconje: {
+    marginTop: 5,
+  },
+  TextInput_7N: {
+    width: 250,
+    marginLeft: 20,
+    fontSize: 25,
+  },
+  Viewaa: {
+    flexDirection: 'row',
+    opacity: 0.61,
+    paddingLeft: 20,
+    paddingRight: 20,
+    paddingTop: 8,
+    paddingBottom: 8,
+    marginTop: '8%',
+  },
+  IconG5: {
+    marginTop: 5,
+  },
+  PickerVU: {
+    marginLeft: 20,
     height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 40,
-    backgroundColor: "#228B22",
-    marginBottom: 100,
+    width: 200,
   },
-})
+  Viewqr: {
+    flexDirection: 'row',
+    opacity: 0.61,
+    paddingLeft: 20,
+    paddingRight: 20,
+    marginTop: '8%',
+    paddingTop: 4,
+    paddingBottom: 4,
+    width: 350,
+  },
+  Iconef: {
+    marginTop: 5,
+  },
+  PickerZx: {
+    marginLeft: 20,
+  },
+  Viewua: {
+    flexDirection: 'row',
+    opacity: 0.61,
+    paddingLeft: 20,
+    paddingRight: 20,
+    marginTop: '8%',
+    paddingTop: 4,
+    paddingBottom: 4,
+    width: 350,
+  },
+  IconCF: {
+    marginTop: 5,
+  },
+  Pickerao: {
+    marginLeft: 20,
+  },
+  ViewLK: {
+    flexDirection: 'row',
+    opacity: 0.61,
+    paddingLeft: 20,
+    paddingRight: 20,
+    marginTop: '8%',
+    paddingTop: 4,
+    paddingBottom: 4,
+    width: 350,
+  },
+  ButtonSolidvy: {
+    textAlign: 'center',
+    paddingTop: 5,
+    paddingBottom: 5,
+    paddingLeft: 60,
+    paddingRight: 60,
+    fontSize: 20,
+    marginTop: '8%',
+    fontFamily: 'System',
+    fontWeight: '700',
+  },
+  ImageBackground_5o: {
+    width: '100%',
+    height: '115%',
+    marginTop: '-12%',
+    flexGrow: 1,
+    flex: 1,
+  },
+  ScrollViewContainerStyle: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  ScrollView: {
+    marginTop: '15%',
+  },
+});
 
-export default SignUpScreen;
+export default withTheme(SignUpScreen);

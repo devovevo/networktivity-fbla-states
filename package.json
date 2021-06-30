@@ -8,7 +8,11 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@draftbit/ui": "^40.36.5",
+    "@react-native-community/datetimepicker": "^3.5.2",
     "@react-native-community/masked-view": "0.1.10",
+    "@react-native-community/picker": "^1.8.1",
+    "@react-native-picker/picker": "1.9.2",
     "@react-navigation/bottom-tabs": "^5.11.8",
     "@react-navigation/material-bottom-tabs": "^5.3.14",
     "@react-navigation/native": "^5.9.3",
@@ -22,10 +26,12 @@
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
     "react-native-gesture-handler": "~1.8.0",
+    "react-native-modal-datetime-picker": "^10.0.0",
     "react-native-paper": "^4.7.2",
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.9",
     "react-native-screens": "~2.15.2",
+    "react-native-svg": "12.1.0",
     "react-native-vector-icons": "^8.0.0",
     "react-native-web": "~0.13.12"
   },
